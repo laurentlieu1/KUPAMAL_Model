@@ -7,6 +7,7 @@ def is_fully_black(image):
     histogram = grayscale_image.histogram()
     return histogram[0] == image.width * image.height
 
+
 # Function to split and save parts of an image
 def split_and_save(image_path, output_folder):
     # Open the image
@@ -27,8 +28,14 @@ def split_and_save(image_path, output_folder):
             part = image.crop(box)
             # Check if the part is fully black
             if not is_fully_black(part):
-                part.save(os.path.join(output_folder, f"{os.path.splitext(os.path.basename(image_path))[0]}_part_{part_number}.jpg"))
+                part.save(
+                    os.path.join(
+                        output_folder,
+                        f"{os.path.splitext(os.path.basename(image_path))[0]}_part_{part_number}.jpg",
+                    )
+                )
             part_number += 1
+
 
 # Folder containing images
 input_folder = os.getcwd() + "/input_folder/"
@@ -38,15 +45,19 @@ output_folder = "output"
 # Create the output folder if it doesn't exist
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
-try : 
-# Iterate through all images in the input folder
+try:
+    # Iterate through all images in the input folder
     for filename in os.listdir(input_folder):
-        if filename.endswith(".JPG") or filename.endswith(".jpeg") or filename.endswith(".png"):
+        if (
+            filename.endswith(".JPG")
+            or filename.endswith(".jpeg")
+            or filename.endswith(".png")
+        ):
             image_path = os.path.join(input_folder, filename)
             # Split and save parts of the image
             split_and_save(image_path, output_folder)
 
     print("--------- SUCCES : Images rognées ---------")
 
-except Exception as error :
+except Exception as error:
     print(f"--------- ERROR : {error} ---------")
