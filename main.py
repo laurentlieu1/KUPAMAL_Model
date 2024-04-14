@@ -1,4 +1,5 @@
 import os
+import sys
 from PIL import Image
 
 # Function to check if an image is fully black
@@ -37,6 +38,24 @@ def split_and_save(image_path, output_folder):
             part_number += 1
 
 
+def process_folder(input_folder, output_folder):
+    for root, dirs, files in os.walk(input_folder):
+        # Create corresponding subfolders in the output directory
+        relative_path = os.path.relpath(root, input_folder)
+        output_subfolder = os.path.join(output_folder, relative_path)
+        os.makedirs(output_subfolder, exist_ok=True)
+
+        for filename in files:
+            if (
+                filename.endswith(".JPG")
+                or filename.endswith(".jpeg")
+                or filename.endswith(".png")
+            ):
+                image_path = os.path.join(root, filename)
+                # Split and save parts of the image
+                split_and_save(image_path, output_subfolder)
+
+
 # Folder containing images
 input_folder = os.getcwd() + "/input_folder/"
 # Folder to save processed images
@@ -46,18 +65,9 @@ output_folder = "output"
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 try:
-    # Iterate through all images in the input folder
-    for filename in os.listdir(input_folder):
-        if (
-            filename.endswith(".JPG")
-            or filename.endswith(".jpeg")
-            or filename.endswith(".png")
-        ):
-            image_path = os.path.join(input_folder, filename)
-            # Split and save parts of the image
-            split_and_save(image_path, output_folder)
-
+    process_folder(input_folder, output_folder)
     print("--------- SUCCES : Images rognées ---------")
-
+    input("Appuyez sur Entrée pour quitter")
 except Exception as error:
     print(f"--------- ERROR : {error} ---------")
+    input("Appuyez sur Entrée pour quitter")
