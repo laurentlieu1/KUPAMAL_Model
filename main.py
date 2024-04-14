@@ -31,17 +31,22 @@ def split_and_save(image_path, output_folder):
             part_number += 1
 
 # Folder containing images
-input_folder = "C:/Users/molan/Documents/Pour rognage-20240331T190715Z-001/Pour rognage"
+input_folder = os.getcwd() + "/input_folder/"
 # Folder to save processed images
 output_folder = "output"
 
 # Create the output folder if it doesn't exist
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
-
+try : 
 # Iterate through all images in the input folder
-for filename in os.listdir(input_folder):
-    if filename.endswith(".JPG") or filename.endswith(".jpeg") or filename.endswith(".png"):
-        image_path = os.path.join(input_folder, filename)
-        # Split and save parts of the image
-        split_and_save(image_path, output_folder)
+    for filename in os.listdir(input_folder):
+        if filename.endswith(".JPG") or filename.endswith(".jpeg") or filename.endswith(".png"):
+            image_path = os.path.join(input_folder, filename)
+            # Split and save parts of the image
+            split_and_save(image_path, output_folder)
+
+    print("--------- SUCCES : Images rognées ---------")
+
+except Exception as error :
+    print(f"--------- ERROR : {error} ---------")
